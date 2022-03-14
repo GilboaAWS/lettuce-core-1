@@ -114,6 +114,8 @@ interface ClusterConnectionProvider extends Closeable {
      */
     void flushCommands();
 
+    void reauth(String passwd);
+
     /**
      * Set from which nodes data is read. The setting is used as default for read operations on this connection. See the
      * documentation for {@link ReadFrom} for more information.

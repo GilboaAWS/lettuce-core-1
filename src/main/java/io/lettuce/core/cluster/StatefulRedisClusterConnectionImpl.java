@@ -295,6 +295,16 @@ public class StatefulRedisClusterConnectionImpl<K, V> extends RedisChannelHandle
         return partitions;
     }
 
+    public void reauthenticate(String passwd)
+    {
+        ClusterConnectionProvider provider = (ClusterConnectionProvider) getClusterDistributionChannelWriter()
+                .getClusterConnectionProvider();
+        if (null == provider) {
+            return;
+        }
+        provider.reauth(passwd);
+    }
+    
     @Override
     public void setReadFrom(ReadFrom readFrom) {
         LettuceAssert.notNull(readFrom, "ReadFrom must not be null");
