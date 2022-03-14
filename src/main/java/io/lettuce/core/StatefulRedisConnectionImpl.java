@@ -293,4 +293,13 @@ public class StatefulRedisConnectionImpl<K, V> extends RedisChannelHandler<K, V>
         return state;
     }
 
+    public void reauthenticate()
+    {
+        if(!state.getCredentials().hasPassword())
+        {
+            return;
+        }
+        async().auth(String.valueOf(state.getCredentials().getPassword()));
+    }
+    
 }

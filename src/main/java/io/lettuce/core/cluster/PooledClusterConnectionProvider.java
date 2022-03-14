@@ -628,6 +628,13 @@ class PooledClusterConnectionProvider<K, V>
     }
 
     /**
+     * Reauth
+     */
+    public void reauth(String passwd) {
+        connectionProvider.forEach(connection -> connection.async().auth(passwd));
+    }
+
+    /**
      * Reset the internal connection cache. This is necessary because the {@link Partitions} have no reference to the connection
      * cache.
      *

@@ -641,6 +641,7 @@ public class RedisClusterClient extends AbstractRedisClient {
         }
 
         topologyRefreshScheduler.activateTopologyRefreshIfNeeded();
+        reauthScheduler.activateReauthIfNeeded();
 
         logger.debug("connectCluster(" + initialUris + ")");
 
@@ -738,6 +739,7 @@ public class RedisClusterClient extends AbstractRedisClient {
         }
 
         topologyRefreshScheduler.activateTopologyRefreshIfNeeded();
+        reauthScheduler.activateReauthIfNeeded();
 
         logger.debug("connectClusterPubSub(" + initialUris + ")");
 
@@ -934,6 +936,23 @@ public class RedisClusterClient extends AbstractRedisClient {
      */
     protected Partitions loadPartitions() {
         return get(loadPartitionsAsync(), Function.identity());
+    }
+
+    public void reauthInConnections() { // take care of exceptions
+
+        if (null == getFirstUri().getPassword()) // Change to take if from the Supplier
+        {
+            return;
+        };
+
+        String passwd = String.valueOf(getFirstUri().getPassword());
+        forEachClusterConnection(input -> {
+            input.reauthenticate(passwd);
+        });
+
+        forEachClusterPubSubConnection(input -> {
+            input.reauthenticate(passwd);
+        });
     }
 
     private static <T> T get(CompletableFuture<T> future, Function<RedisException, RedisException> mapper) {
