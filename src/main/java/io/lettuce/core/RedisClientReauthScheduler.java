@@ -11,6 +11,13 @@ import io.netty.util.concurrent.ScheduledFuture;
 import io.netty.util.internal.logging.InternalLogger;
 import io.netty.util.internal.logging.InternalLoggerFactory;
 
+/**
+ * Scheduler utility to schedule reauthentication process to all the existing connections.
+ *
+ * @author Barak Gilboa
+ * @since 6.2
+ */
+
 public class RedisClientReauthScheduler implements Runnable {
 
     private static final InternalLogger logger = InternalLoggerFactory.getInstance(RedisClientReauthScheduler.class);
@@ -21,17 +28,17 @@ public class RedisClientReauthScheduler implements Runnable {
     private final ClientResources clientResources;
     private final EventExecutorGroup genericWorkerPool;
 
-    private final AbstractRedisClient arc;
+    private final AbstractRedisClient clientToReauth;
 
     public RedisClientReauthScheduler(
         Supplier<ClientOptions> clientOptions,
         ClientResources clientResources,
-        AbstractRedisClient arc)
+        AbstractRedisClient clientToReauth)
     {
         this.clientOptions = clientOptions;
         this.clientResources = clientResources;
         this.genericWorkerPool = this.clientResources.eventExecutorGroup();
-        this.arc = arc;
+        this.clientToReauth = clientToReauth;
     }
 
     public void activateReauthIfNeeded() {
@@ -69,6 +76,6 @@ public class RedisClientReauthScheduler implements Runnable {
 
     @Override
     public void run() {
-        arc.reauthInConnections();
+        clientToReauth.reauthInConnections();
     }    
 }

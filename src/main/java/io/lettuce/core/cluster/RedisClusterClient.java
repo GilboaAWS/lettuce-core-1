@@ -938,20 +938,33 @@ public class RedisClusterClient extends AbstractRedisClient {
         return get(loadPartitionsAsync(), Function.identity());
     }
 
-    public void reauthInConnections() { // take care of exceptions
-
-        if (null == getFirstUri().getPassword()) // Change to take if from the Supplier
-        {
-            return;
-        };
-
-        String passwd = String.valueOf(getFirstUri().getPassword());
+    public void reauthenticateAllConnections(RedisCredentials creds) {
         forEachClusterConnection(input -> {
-            input.reauthenticate(passwd);
+            input.reauthenticate(creds);
         });
 
         forEachClusterPubSubConnection(input -> {
-            input.reauthenticate(passwd);
+            input.reauthenticate(creds);
+        });
+    }
+    
+    public void reauthInConnections() {
+        RedisCredentialsProvider credentialsProvider = getFirstUri().getCredentialsProvider();
+        if (credentialsProvider instanceof RedisCredentialsProvider.ImmediateRedisCredentialsProvider) {
+            RedisCredentials redisCredentials =
+                ((RedisCredentialsProvider.ImmediateRedisCredentialsProvider)credentialsProvider).resolveCredentialsNow();
+            if (!redisCredentials.hasPassword()) {
+                return;
+            }
+            reauthenticateAllConnections(redisCredentials);
+        }
+
+        CompletableFuture<RedisCredentials> credentialsFuture = credentialsProvider.resolveCredentials().toFuture();
+        credentialsFuture.thenAcceptAsync(redisCredentials -> {
+            if (!redisCredentials.hasPassword()) {
+                return;
+            }
+            reauthenticateAllConnections(redisCredentials);
         });
     }
 

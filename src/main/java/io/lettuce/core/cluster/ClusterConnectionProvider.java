@@ -19,6 +19,7 @@ import java.io.Closeable;
 import java.util.concurrent.CompletableFuture;
 
 import io.lettuce.core.ReadFrom;
+import io.lettuce.core.RedisCredentials;
 import io.lettuce.core.RedisException;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.cluster.models.partitions.Partitions;
@@ -114,7 +115,12 @@ interface ClusterConnectionProvider extends Closeable {
      */
     void flushCommands();
 
-    void reauth(String passwd);
+    /**
+     * Reauthenticate all the existing connection
+     * 
+     * @param creds the credentials to authenticate with.
+     */
+    void reauthenticate(RedisCredentials creds);
 
     /**
      * Set from which nodes data is read. The setting is used as default for read operations on this connection. See the

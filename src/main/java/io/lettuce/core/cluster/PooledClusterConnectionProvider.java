@@ -26,12 +26,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.nio.CharBuffer;
 
 import io.lettuce.core.ConnectionFuture;
 import io.lettuce.core.OrderingReadFromAccessor;
 import io.lettuce.core.ReadFrom;
 import io.lettuce.core.RedisChannelWriter;
 import io.lettuce.core.RedisConnectionException;
+import io.lettuce.core.RedisCredentials;
 import io.lettuce.core.RedisException;
 import io.lettuce.core.RedisFuture;
 import io.lettuce.core.RedisURI;
@@ -628,10 +630,21 @@ class PooledClusterConnectionProvider<K, V>
     }
 
     /**
-     * Reauth
+     * Reauthenticate all the existing connection
+     * 
+     * @param creds the credentials to authenticate with.
      */
-    public void reauth(String passwd) {
-        connectionProvider.forEach(connection -> connection.async().auth(passwd));
+    public void reauthenticate(RedisCredentials creds) {
+        CharSequence passwd = CharBuffer.wrap(creds.getPassword());
+        if (creds.hasUsername()) {
+            connectionProvider.forEach(connection -> {
+                connection.async().auth(creds.getUsername(), CharBuffer.wrap(passwd));
+            });
+        } else {
+            connectionProvider.forEach(connection -> {
+                connection.async().auth(CharBuffer.wrap(passwd));
+            });
+        }
     }
 
     /**

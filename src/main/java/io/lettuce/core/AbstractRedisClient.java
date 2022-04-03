@@ -268,7 +268,7 @@ public abstract class AbstractRedisClient {
     }
 
     /**
-     * Reauthenticate all exist connections.
+     * Reauthenticate all existing connections.
      *     
      * @since 6.2
      */

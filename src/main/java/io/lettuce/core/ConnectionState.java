@@ -110,7 +110,7 @@ public class ConnectionState {
             return;
         }
 
-        if (!(credentialsSupplier instanceof DefaultCredentialsSupplier)) {
+        if (!(this.credentialsProvider instanceof StaticCredentialsProvider)) {
             return;
         }
 
