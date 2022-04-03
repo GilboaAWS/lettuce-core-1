@@ -51,9 +51,9 @@ class ClientOptionsUnitTests {
     void testCopy() {
 
         ClientOptions original = ClientOptions.builder()
-        .scriptCharset(StandardCharsets.US_ASCII)
-        .enablePeriodicReauthenticate(Duration.ofSeconds(10))
-        .build();
+            .scriptCharset(StandardCharsets.US_ASCII)
+            .enablePeriodicReauthenticate(Duration.ofSeconds(10))
+            .build();
         ClientOptions copy = ClientOptions.copyOf(original);
 
         checkAssertions(copy);
