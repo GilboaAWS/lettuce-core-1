@@ -302,9 +302,6 @@ public class StatefulRedisConnectionImpl<K, V> extends RedisChannelHandler<K, V>
         if (credentialsProvider instanceof RedisCredentialsProvider.ImmediateRedisCredentialsProvider) {
             RedisCredentials redisCredentials = 
                 ((RedisCredentialsProvider.ImmediateRedisCredentialsProvider)credentialsProvider).resolveCredentialsNow();
-            if (!redisCredentials.hasPassword()) {
-                return;
-            }
             CharSequence passwd = CharBuffer.wrap(redisCredentials.getPassword());
             if (redisCredentials.hasUsername()) {
                 async().auth(redisCredentials.getUsername(), passwd);
@@ -315,9 +312,6 @@ public class StatefulRedisConnectionImpl<K, V> extends RedisChannelHandler<K, V>
 
         CompletableFuture<RedisCredentials> credentialsFuture = credentialsProvider.resolveCredentials().toFuture();
         credentialsFuture.thenAcceptAsync(redisCredentials -> {
-            if (!redisCredentials.hasPassword()) {
-                return;
-            }
             CharSequence passwd = CharBuffer.wrap(redisCredentials.getPassword());
             if (redisCredentials.hasUsername()) {
                 async().auth(redisCredentials.getUsername(), passwd);

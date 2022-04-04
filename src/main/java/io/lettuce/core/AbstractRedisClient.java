@@ -272,7 +272,7 @@ public abstract class AbstractRedisClient {
      *     
      * @since 6.2
      */
-    abstract public void reauthInConnections();
+    abstract public void reauthConnections();
 
     /**
      * Apply a {@link Consumer} of {@link Closeable} to all active connections.
