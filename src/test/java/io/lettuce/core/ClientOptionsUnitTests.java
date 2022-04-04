@@ -39,12 +39,12 @@ class ClientOptionsUnitTests {
     @Test
     void testBuilder() {
         ClientOptions options = ClientOptions.builder()
-        .scriptCharset(StandardCharsets.US_ASCII)
-        .enablePeriodicReauthenticate(Duration.ofSeconds(10))
-        .build();
+            .scriptCharset(StandardCharsets.US_ASCII)
+            .enablePeriodicReauthentication(Duration.ofSeconds(10))
+            .build();
         checkAssertions(options);
         assertThat(options.getScriptCharset()).isEqualTo(StandardCharsets.US_ASCII);
-        assertThat(options.getReauthenticatePeriod()).isEqualTo(Duration.ofSeconds(10));
+        assertThat(options.getReauthenticationPeriod()).isEqualTo(Duration.ofSeconds(10));
     }
 
     @Test
@@ -52,7 +52,7 @@ class ClientOptionsUnitTests {
 
         ClientOptions original = ClientOptions.builder()
             .scriptCharset(StandardCharsets.US_ASCII)
-            .enablePeriodicReauthenticate(Duration.ofSeconds(10))
+            .enablePeriodicReauthentication(Duration.ofSeconds(10))
             .build();
         ClientOptions copy = ClientOptions.copyOf(original);
 
@@ -60,8 +60,8 @@ class ClientOptionsUnitTests {
         assertThat(copy.getScriptCharset()).isEqualTo(StandardCharsets.US_ASCII);
         assertThat(copy.mutate().build().getScriptCharset()).isEqualTo(StandardCharsets.US_ASCII);
         
-        assertThat(copy.getReauthenticatePeriod()).isEqualTo(Duration.ofSeconds(10));
-        assertThat(copy.mutate().build().getReauthenticatePeriod()).isEqualTo(Duration.ofSeconds(10));
+        assertThat(copy.getReauthenticationPeriod()).isEqualTo(Duration.ofSeconds(10));
+        assertThat(copy.mutate().build().getReauthenticationPeriod()).isEqualTo(Duration.ofSeconds(10));
 
         assertThat(original.mutate()).isNotSameAs(copy.mutate());
     }

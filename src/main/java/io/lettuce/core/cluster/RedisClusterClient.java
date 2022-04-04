@@ -948,22 +948,16 @@ public class RedisClusterClient extends AbstractRedisClient {
         });
     }
     
-    public void reauthInConnections() {
+    public void reauthConnections() {
         RedisCredentialsProvider credentialsProvider = getFirstUri().getCredentialsProvider();
         if (credentialsProvider instanceof RedisCredentialsProvider.ImmediateRedisCredentialsProvider) {
             RedisCredentials redisCredentials =
                 ((RedisCredentialsProvider.ImmediateRedisCredentialsProvider)credentialsProvider).resolveCredentialsNow();
-            if (!redisCredentials.hasPassword()) {
-                return;
-            }
             reauthenticateAllConnections(redisCredentials);
         }
 
         CompletableFuture<RedisCredentials> credentialsFuture = credentialsProvider.resolveCredentials().toFuture();
         credentialsFuture.thenAcceptAsync(redisCredentials -> {
-            if (!redisCredentials.hasPassword()) {
-                return;
-            }
             reauthenticateAllConnections(redisCredentials);
         });
     }
@@ -1180,21 +1174,6 @@ public class RedisClusterClient extends AbstractRedisClient {
      */
     protected void forEachClusterPubSubConnection(Consumer<StatefulRedisClusterPubSubConnectionImpl<?, ?>> function) {
         forEachCloseable(input -> input instanceof StatefulRedisClusterPubSubConnectionImpl, function);
-    }
-
-    /**
-     * Apply a {@link Consumer} of {@link Closeable} to all active connections.
-     *
-     * @param <T>
-     * @param function the {@link Consumer}.
-     */
-    @SuppressWarnings("unchecked")
-    protected <T extends Closeable> void forEachCloseable(Predicate<? super Closeable> selector, Consumer<T> function) {
-        for (Closeable c : closeableResources) {
-            if (selector.test(c)) {
-                function.accept((T) c);
-            }
-        }
     }
 
     /**

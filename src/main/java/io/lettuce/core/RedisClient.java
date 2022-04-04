@@ -302,7 +302,7 @@ public class RedisClient extends AbstractRedisClient {
         return future;
     }
 
-    public void reauthInConnections() { // take care of exceptions
+    public void reauthConnections() {
 
         forEachConnection(input -> {
             input.reauthenticate();

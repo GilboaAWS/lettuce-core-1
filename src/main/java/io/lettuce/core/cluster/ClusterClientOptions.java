@@ -124,8 +124,8 @@ public class ClusterClientOptions extends ClientOptions {
 
         Builder builder = new Builder();
         builder.autoReconnect(clientOptions.isAutoReconnect())
-                .enablePeriodicReauthenticate(clientOptions.isPeriodicReauthenticate())
-                .reauthenticatePeriod(clientOptions.getReauthenticatePeriod())
+                .enablePeriodicReauthentication(clientOptions.isPeriodicReauthenticate())
+                .reauthenticationPeriod(clientOptions.getReauthenticationPeriod())
                 .cancelCommandsOnReconnectFailure(clientOptions.isCancelCommandsOnReconnectFailure())
                 .decodeBufferPolicy(clientOptions.getDecodeBufferPolicy())
                 .disconnectedBehavior(clientOptions.getDisconnectedBehavior())
@@ -174,25 +174,25 @@ public class ClusterClientOptions extends ClientOptions {
         }
 
         @Override
-        public Builder enablePeriodicReauthenticate(boolean periodicReauthenticate) {
-            super.enablePeriodicReauthenticate(periodicReauthenticate);
+        public Builder enablePeriodicReauthentication(boolean periodicReauthentication) {
+            super.enablePeriodicReauthentication(periodicReauthentication);
             return this;
         }
 
         @Override
-        public Builder enablePeriodicReauthenticate() {
-            return enablePeriodicReauthenticate(true);
+        public Builder enablePeriodicReauthentication() {
+            return enablePeriodicReauthentication(true);
         }
 
         @Override
-        public Builder reauthenticatePeriod(Duration reauthenticatePeriod) {
-            super.reauthenticatePeriod(reauthenticatePeriod);
+        public Builder reauthenticationPeriod(Duration reauthenticationPeriod) {
+            super.reauthenticationPeriod(reauthenticationPeriod);
             return this;
         }
 
         @Override
-        public Builder enablePeriodicReauthenticate(Duration reauthenticatePeriod) {
-            return reauthenticatePeriod(reauthenticatePeriod).enablePeriodicReauthenticate();
+        public Builder enablePeriodicReauthentication(Duration reauthenticationPeriod) {
+            return reauthenticationPeriod(reauthenticationPeriod).enablePeriodicReauthentication();
         }
 
         /**
@@ -363,8 +363,8 @@ public class ClusterClientOptions extends ClientOptions {
         Builder builder = new Builder();
 
         builder.autoReconnect(isAutoReconnect())
-                .enablePeriodicReauthenticate(isPeriodicReauthenticate())
-                .reauthenticatePeriod(getReauthenticatePeriod())
+                .enablePeriodicReauthentication(isPeriodicReauthenticate())
+                .reauthenticationPeriod(getReauthenticationPeriod())
                 .cancelCommandsOnReconnectFailure(isCancelCommandsOnReconnectFailure())
                 .decodeBufferPolicy(getDecodeBufferPolicy())
                 .disconnectedBehavior(getDisconnectedBehavior()).maxRedirects(getMaxRedirects())

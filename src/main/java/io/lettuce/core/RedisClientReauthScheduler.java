@@ -51,7 +51,7 @@ public class RedisClientReauthScheduler implements Runnable {
 
         if (clientReauthActivated.compareAndSet(false, true)) {
             ScheduledFuture<?> scheduledFuture = genericWorkerPool.scheduleAtFixedRate(this,
-                options.getReauthenticatePeriod().toNanos(), options.getReauthenticatePeriod().toNanos(), TimeUnit.NANOSECONDS);
+                options.getReauthenticationPeriod().toNanos(), options.getReauthenticationPeriod().toNanos(), TimeUnit.NANOSECONDS);
             clientReauthFuture.set(scheduledFuture);
         }
     }
@@ -76,6 +76,10 @@ public class RedisClientReauthScheduler implements Runnable {
 
     @Override
     public void run() {
-        clientToReauth.reauthInConnections();
+        try {
+            clientToReauth.reauthConnections();
+        } catch (IllegalArgumentException e) {
+            logger.error("Reauthenticate connections failed with: ", e);
+        }
     }    
 }
