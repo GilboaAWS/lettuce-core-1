@@ -301,10 +301,7 @@ public class StatefulRedisClusterConnectionImpl<K, V> extends RedisChannelHandle
     {
         ClusterConnectionProvider provider = (ClusterConnectionProvider) getClusterDistributionChannelWriter()
                 .getClusterConnectionProvider();
-        if (null == provider) {
-            return;
-        }
-        CharSequence passwd = CharBuffer.wrap(creds.getPassword());        
+        CharSequence passwd = CharBuffer.wrap(creds.getPassword());
         if (creds.hasUsername()) {
             async().auth(creds.getUsername(), passwd);
         } else {
