@@ -198,9 +198,6 @@ class StatefulRedisClusterPubSubConnectionImpl<K, V> extends StatefulRedisPubSub
     {
         ClusterConnectionProvider provider = (ClusterConnectionProvider) getClusterDistributionChannelWriter()
                 .getClusterConnectionProvider();
-        if (null == provider) {
-            return;
-        }
         CharSequence passwd = CharBuffer.wrap(creds.getPassword());        
         if (creds.hasUsername()) {
             async().auth(creds.getUsername(), passwd);
