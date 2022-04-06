@@ -17,7 +17,6 @@ package io.lettuce.core;
 
 import static io.lettuce.core.internal.LettuceStrings.*;
 
-import java.io.Closeable;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.time.Duration;
@@ -28,8 +27,6 @@ import java.util.concurrent.CompletionException;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Supplier;
-import java.util.function.Predicate;
-import java.util.function.Consumer;
 
 import reactor.core.publisher.Mono;
 import io.lettuce.core.api.StatefulRedisConnection;
@@ -297,28 +294,7 @@ public class RedisClient extends AbstractRedisClient {
             }
         });
 
-        reauthScheduler.activateReauthIfNeeded();
-
         return future;
-    }
-
-    public void reauthConnections() {
-
-        forEachConnection(input -> {
-            input.reauthenticate();
-        });
-
-        forEachPubSubConnection(input -> {
-            input.reauthenticate();
-        });
-    }
-
-    protected void forEachConnection(Consumer<StatefulRedisConnectionImpl<?, ?>> function) {
-        forEachCloseable(input -> input instanceof StatefulRedisConnectionImpl, function);
-    }
-
-    protected void forEachPubSubConnection(Consumer<StatefulRedisPubSubConnectionImpl<?, ?>> function) {
-        forEachCloseable(input -> input instanceof StatefulRedisPubSubConnectionImpl, function);
     }
 
     @SuppressWarnings("unchecked")
@@ -347,8 +323,6 @@ public class RedisClient extends AbstractRedisClient {
         connectionBuilder.connectionInitializer(createHandshake(state));
 
         ConnectionFuture<RedisChannelHandler<K, V>> future = initializeChannelAsync(connectionBuilder);
-
-        reauthScheduler.activateReauthIfNeeded();
 
         return future.thenApply(channelHandler -> (S) connection);
     }
@@ -444,8 +418,6 @@ public class RedisClient extends AbstractRedisClient {
 
         ConnectionFuture<StatefulRedisPubSubConnection<K, V>> future = connectStatefulAsync(connection, endpoint, redisURI,
                 () -> new PubSubCommandHandler<>(getOptions(), getResources(), codec, endpoint));
-
-        reauthScheduler.activateReauthIfNeeded();
 
         return future.whenComplete((conn, throwable) -> {
 

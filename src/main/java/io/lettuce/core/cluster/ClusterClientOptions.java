@@ -124,8 +124,6 @@ public class ClusterClientOptions extends ClientOptions {
 
         Builder builder = new Builder();
         builder.autoReconnect(clientOptions.isAutoReconnect())
-                .enablePeriodicReauthentication(clientOptions.isPeriodicReauthenticate())
-                .reauthenticationPeriod(clientOptions.getReauthenticationPeriod())
                 .cancelCommandsOnReconnectFailure(clientOptions.isCancelCommandsOnReconnectFailure())
                 .decodeBufferPolicy(clientOptions.getDecodeBufferPolicy())
                 .disconnectedBehavior(clientOptions.getDisconnectedBehavior())
@@ -171,28 +169,6 @@ public class ClusterClientOptions extends ClientOptions {
         public Builder autoReconnect(boolean autoReconnect) {
             super.autoReconnect(autoReconnect);
             return this;
-        }
-
-        @Override
-        public Builder enablePeriodicReauthentication(boolean periodicReauthentication) {
-            super.enablePeriodicReauthentication(periodicReauthentication);
-            return this;
-        }
-
-        @Override
-        public Builder enablePeriodicReauthentication() {
-            return enablePeriodicReauthentication(true);
-        }
-
-        @Override
-        public Builder reauthenticationPeriod(Duration reauthenticationPeriod) {
-            super.reauthenticationPeriod(reauthenticationPeriod);
-            return this;
-        }
-
-        @Override
-        public Builder enablePeriodicReauthentication(Duration reauthenticationPeriod) {
-            return reauthenticationPeriod(reauthenticationPeriod).enablePeriodicReauthentication();
         }
 
         /**
@@ -363,8 +339,6 @@ public class ClusterClientOptions extends ClientOptions {
         Builder builder = new Builder();
 
         builder.autoReconnect(isAutoReconnect())
-                .enablePeriodicReauthentication(isPeriodicReauthenticate())
-                .reauthenticationPeriod(getReauthenticationPeriod())
                 .cancelCommandsOnReconnectFailure(isCancelCommandsOnReconnectFailure())
                 .decodeBufferPolicy(getDecodeBufferPolicy())
                 .disconnectedBehavior(getDisconnectedBehavior()).maxRedirects(getMaxRedirects())
