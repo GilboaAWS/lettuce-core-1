@@ -955,11 +955,12 @@ public class RedisClusterClient extends AbstractRedisClient {
                 ((RedisCredentialsProvider.ImmediateRedisCredentialsProvider)credentialsProvider).resolveCredentialsNow();
             reauthenticateAllConnections(redisCredentials);
         }
-
-        CompletableFuture<RedisCredentials> credentialsFuture = credentialsProvider.resolveCredentials().toFuture();
-        credentialsFuture.thenAcceptAsync(redisCredentials -> {
-            reauthenticateAllConnections(redisCredentials);
-        });
+        else {
+            CompletableFuture<RedisCredentials> credentialsFuture = credentialsProvider.resolveCredentials().toFuture();
+            credentialsFuture.thenAcceptAsync(redisCredentials -> {
+                reauthenticateAllConnections(redisCredentials);
+            });
+        }
     }
 
     private static <T> T get(CompletableFuture<T> future, Function<RedisException, RedisException> mapper) {

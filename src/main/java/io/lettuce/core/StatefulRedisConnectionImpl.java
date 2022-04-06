@@ -309,15 +309,18 @@ public class StatefulRedisConnectionImpl<K, V> extends RedisChannelHandler<K, V>
                 async().auth(passwd);
             }
         }
+        else {
+            CompletableFuture<RedisCredentials> credentialsFuture = credentialsProvider.resolveCredentials().toFuture();
+            credentialsFuture.thenAcceptAsync(redisCredentials -> {
+                CharSequence passwd = CharBuffer.wrap(redisCredentials.getPassword());
+                if (redisCredentials.hasUsername()) {
+                    async().auth(redisCredentials.getUsername(), passwd);
+                } else {
+                    async().auth(passwd);
+                }
+            });
+        }
 
-        CompletableFuture<RedisCredentials> credentialsFuture = credentialsProvider.resolveCredentials().toFuture();
-        credentialsFuture.thenAcceptAsync(redisCredentials -> {
-            CharSequence passwd = CharBuffer.wrap(redisCredentials.getPassword());
-            if (redisCredentials.hasUsername()) {
-                async().auth(redisCredentials.getUsername(), passwd);
-            } else {
-                async().auth(passwd);
-            }
-        });
+        
     }
 }

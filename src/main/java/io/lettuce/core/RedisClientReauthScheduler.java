@@ -78,7 +78,7 @@ public class RedisClientReauthScheduler implements Runnable {
     public void run() {
         try {
             clientToReauth.reauthConnections();
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             logger.error("Reauthenticate connections failed with: ", e);
         }
     }    

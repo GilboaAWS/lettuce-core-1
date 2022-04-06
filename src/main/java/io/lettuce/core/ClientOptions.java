@@ -217,8 +217,10 @@ public class ClientOptions implements Serializable {
         }
 
         /**
-         * Enables or disables periodic reauthenticate of active connections. Defaults to {@code false}. See
+         * Enables or disables periodic reauthentication of active connections. Defaults to {@code false}. See
          * {@link #DEFAULT_AUTO_REAUTHENTICATE}.
+         * Defaults period {@literal 60 MINUTES}. See {@link #DEFAULT_REAUTHENTICATE_PERIOD} and
+         * {@link #DEFAULT_REAUTHENTICATE_PERIOD_UNIT}.
          *
          * @param periodicReauthenticate true/false
          * @return {@code this}
@@ -230,8 +232,10 @@ public class ClientOptions implements Serializable {
         }
 
         /**
-         * Enables periodic reauthenticate of active connections. Defaults to {@code false}. See
+         * Enables periodic reauthentication of active connections. Defaults to {@code false}. See
          * {@link #DEFAULT_AUTO_REAUTHENTICATE}.
+         * Defaults period {@literal 60 MINUTES}. See {@link #DEFAULT_REAUTHENTICATE_PERIOD} and
+         * {@link #DEFAULT_REAUTHENTICATE_PERIOD_UNIT}.
          *
          * @return {@code this}
          * @since 6.2
@@ -241,7 +245,7 @@ public class ClientOptions implements Serializable {
         }
 
         /**
-         * Enables periodic reauthenticate and sets the reauthentication period. Defaults to {@literal 60 MINUTES}. See
+         * Enables periodic reauthentication and sets the reauthentication period. Defaults to {@literal 60 MINUTES}. See
          * {@link #DEFAULT_REAUTHENTICATE_PERIOD} and {@link #DEFAULT_REAUTHENTICATE_PERIOD_UNIT}. This method is a shortcut for
          * {@link #reauthenticationPeriod(Duration)} and {@link #enablePeriodicReauthentication()}.
          *
@@ -254,7 +258,7 @@ public class ClientOptions implements Serializable {
         }
 
         /**
-         * Set the refresh period. Defaults to {@literal 60 MINUTES}. See {@link #DEFAULT_REAUTHENTICATE_PERIOD} and
+         * Set the reauthentication period. Defaults to {@literal 60 MINUTES}. See {@link #DEFAULT_REAUTHENTICATE_PERIOD} and
          * {@link #DEFAULT_REAUTHENTICATE_PERIOD_UNIT}.
          *
          * @param reauthenticationPeriod period for triggering reauthentication, must be greater {@literal 0}
