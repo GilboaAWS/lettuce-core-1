@@ -24,7 +24,7 @@ import io.lettuce.core.internal.LettuceAssert;
  * @author Mark Paluch
  * @since 6.2
  */
-public final class StaticCredentialsProvider
+public class StaticCredentialsProvider
         implements RedisCredentialsProvider, RedisCredentialsProvider.ImmediateRedisCredentialsProvider {
 
     private final RedisCredentials credentials;
