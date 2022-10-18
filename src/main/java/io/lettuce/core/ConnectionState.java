@@ -110,6 +110,10 @@ public class ConnectionState {
             return;
         }
 
+        if (!(this.credentialsProvider instanceof StaticCredentialsProvider)) {
+            return;
+        }
+
         if (args.size() > 1) {
             this.credentialsProvider = new StaticCredentialsProvider(new String(args.get(0)), args.get(1));
         } else {
